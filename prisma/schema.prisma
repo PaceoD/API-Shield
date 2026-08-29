@@ -1,0 +1,76 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  apis Api[]
+
+  @@map("users")
+}
+
+model Api {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @db.Uuid
+  name              String
+  description       String?
+  targetUrl         String
+  enabled           Boolean  @default(true)
+  rateLimit         Int
+  rateWindowSeconds Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apiKeys      ApiKey[]
+  requestStats RequestStat[]
+
+  @@index([userId])
+  @@map("apis")
+}
+
+model ApiKey {
+  id         String    @id @default(uuid()) @db.Uuid
+  apiId      String    @db.Uuid
+  name       String
+  keyPrefix  String
+  keyHash    String    @unique
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+
+  api          Api           @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  requestStats RequestStat[]
+
+  @@index([apiId])
+  @@map("api_keys")
+}
+
+model RequestStat {
+  id         String   @id @default(uuid()) @db.Uuid
+  apiId      String   @db.Uuid
+  apiKeyId   String?  @db.Uuid
+  endpoint   String
+  method     String
+  statusCode Int
+  latencyMs  Int?
+  blocked    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  api    Api     @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  apiKey ApiKey? @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@index([apiId, createdAt])
+  @@index([apiKeyId, createdAt])
+  @@map("request_stats")
+}
