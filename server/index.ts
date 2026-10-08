@@ -65,35 +65,37 @@ app.use(notFoundHandler);
 // Centralized Error Handling Middleware
 app.use(errorHandler);
 
-// Start Server
-const server = app.listen(config.port, () => {
-  console.log(`\n🛡️  APIShield Backend running in [${config.env}] mode`);
-  console.log(`📡 Listening on: http://localhost:${config.port}`);
-  console.log(`🔑 Auth Endpoints: http://localhost:${config.port}/api/auth/register, /login, /logout, /me`);
-  console.log(`🩺 Health Check: http://localhost:${config.port}/api/health`);
-  console.log(`⚡ Gateway Router: http://localhost:${config.port}/api/gateway/:apiId/*`);
-  console.log(`🎯 Local Echo Target: http://localhost:${config.port}/api/echo/*`);
-  console.log(`📊 Management APIs: http://localhost:${config.port}/api/apis, /api/keys, /api/analytics\n`);
-});
-
-// Graceful Shutdown Handlers
-const shutdown = async (signal: string) => {
-  console.log(`\nReceived ${signal}. Shutting down gracefully...`);
-  server.close(async () => {
-    try {
-      await Promise.all([
-        disconnectDatabase(),
-        disconnectRedis(),
-      ]);
-      console.log('Database and Redis connections closed.');
-    } catch (err) {
-      console.error('Error during disconnect:', err);
-    }
-    process.exit(0);
+// Start Server (only when not running in Vercel Serverless environment)
+if (!process.env.VERCEL) {
+  const server = app.listen(config.port, () => {
+    console.log(`\n🛡️  APIShield Backend running in [${config.env}] mode`);
+    console.log(`📡 Listening on: http://localhost:${config.port}`);
+    console.log(`🔑 Auth Endpoints: http://localhost:${config.port}/api/auth/register, /login, /logout, /me`);
+    console.log(`🩺 Health Check: http://localhost:${config.port}/api/health`);
+    console.log(`⚡ Gateway Router: http://localhost:${config.port}/api/gateway/:apiId/*`);
+    console.log(`🎯 Local Echo Target: http://localhost:${config.port}/api/echo/*`);
+    console.log(`📊 Management APIs: http://localhost:${config.port}/api/apis, /api/keys, /api/analytics\n`);
   });
-};
 
-process.on('SIGINT', () => shutdown('SIGINT'));
-process.on('SIGTERM', () => shutdown('SIGTERM'));
+  // Graceful Shutdown Handlers
+  const shutdown = async (signal: string) => {
+    console.log(`\nReceived ${signal}. Shutting down gracefully...`);
+    server.close(async () => {
+      try {
+        await Promise.all([
+          disconnectDatabase(),
+          disconnectRedis(),
+        ]);
+        console.log('Database and Redis connections closed.');
+      } catch (err) {
+        console.error('Error during disconnect:', err);
+      }
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+}
 
 export default app;
