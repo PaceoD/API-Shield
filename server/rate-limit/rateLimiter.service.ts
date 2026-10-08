@@ -21,8 +21,14 @@ export interface RateLimitResult {
   retryAfter: number; // Seconds until next token is available
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+let __dirname = '';
+try {
+  if (typeof import.meta !== 'undefined' && import.meta.url) {
+    __dirname = path.dirname(fileURLToPath(import.meta.url));
+  }
+} catch {
+  //
+}
 
 // Read Lua script from file or use embedded fallback
 const luaScriptPath = path.resolve(__dirname, 'sliding-window.lua');
