@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "client:dev": "vite",
     "server:dev": "tsx watch server/index.ts",
-    "build": "prisma generate && tsc && vite build",
+    "build": "prisma generate && esbuild api/index.ts --bundle --platform=node --target=node18 --format=esm --outfile=api/index.js --packages=external && tsc && vite build",
     "preview": "vite preview",
     "server:start": "tsx server/index.ts",
     "db:generate": "prisma generate",
