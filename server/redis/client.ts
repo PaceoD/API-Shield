@@ -39,6 +39,9 @@ if (config.isDevelopment) {
  */
 export async function checkRedisConnection(): Promise<boolean> {
   try {
+    if (process.env.VERCEL && config.redis.url.includes('localhost')) {
+      return false;
+    }
     if (redis.status === 'wait') {
       await redis.connect();
     }

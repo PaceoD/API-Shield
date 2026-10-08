@@ -32,6 +32,9 @@ if (config.isDevelopment) {
  */
 export async function checkDatabaseConnection(): Promise<boolean> {
   try {
+    if (process.env.VERCEL && config.db.url.includes('localhost')) {
+      return false;
+    }
     await prisma.$queryRaw`SELECT 1`;
     return true;
   } catch {
