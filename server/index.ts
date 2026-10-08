@@ -33,10 +33,19 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (e.g. curl, test suites, or server-to-server)
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`Origin '${origin}' not permitted by CORS policy`));
+        return callback(null, true);
       }
+
+      // Allow Vercel production and preview deployment origins
+      if (
+        origin.endsWith('.vercel.app') ||
+        (process.env.VERCEL_URL && origin.includes(process.env.VERCEL_URL)) ||
+        (process.env.VERCEL_PROJECT_PRODUCTION_URL && origin.includes(process.env.VERCEL_PROJECT_PRODUCTION_URL))
+      ) {
+        return callback(null, true);
+      }
+
+      callback(new Error(`Origin '${origin}' not permitted by CORS policy`));
     },
     credentials: true,
   })

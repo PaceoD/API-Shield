@@ -73,15 +73,30 @@ export function errorHandler(
       });
       return;
     }
+    if (err.code.startsWith('P1')) {
+      console.error('Database Connection Error (Prisma P1xxx):', err.code, err.message);
+      res.status(503).json({
+        error: {
+          code: 'DATABASE_UNAVAILABLE',
+          message: 'Unable to connect to database. Please verify DATABASE_URL environment variable in Vercel settings.',
+          statusCode: 503,
+        },
+      });
+      return;
+    }
   }
 
   // 4. Prisma Database Connection / Initialization Errors
-  if (err instanceof Prisma.PrismaClientInitializationError) {
-    console.error('Database Connection Error (PostgreSQL unavailable):', err.message);
+  if (
+    err instanceof Prisma.PrismaClientInitializationError ||
+    err instanceof Prisma.PrismaClientUnknownRequestError ||
+    err instanceof Prisma.PrismaClientRustPanicError
+  ) {
+    console.error('Database Connection Error (PostgreSQL unavailable):', (err as Error).message);
     res.status(503).json({
       error: {
         code: 'DATABASE_UNAVAILABLE',
-        message: 'Database service is currently unreachable. Please ensure PostgreSQL is running (e.g. docker compose up -d).',
+        message: 'Database service is currently unreachable. Please ensure PostgreSQL is running and DATABASE_URL is properly configured.',
         statusCode: 503,
       },
     });
