@@ -54,6 +54,14 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Normalize req.url when running under Vercel Serverless Function rewrites
+app.use((req, res, next) => {
+  if (process.env.VERCEL && !req.url.startsWith('/api')) {
+    req.url = `/api${req.url.startsWith('/') ? '' : '/'}${req.url}`;
+  }
+  next();
+});
+
 // Core Health & Authentication Routes
 app.use('/api/health', healthRouter);
 app.use('/api/auth', authRouter);
