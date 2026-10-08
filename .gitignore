@@ -36,3 +36,7 @@ Thumbs.db
 # Agent generated
 .system_generated/
 scratch/
+
+# Generated API build artifacts
+api/*.js
+
