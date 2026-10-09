@@ -1,5 +1,5 @@
 import { Redis, RedisOptions } from 'ioredis';
-import { config } from '../config';
+import { config } from '../config.js';
 
 // Declare global Redis instance to prevent multiple client connections in hot-reload
 declare global {

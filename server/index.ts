@@ -1,18 +1,18 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { config } from './config';
-import { healthRouter } from './routes/health';
-import { authRouter } from './routes/auth';
-import { gatewayRouter } from './routes/gateway';
-import { apisRouter } from './routes/apis';
-import { keysRouter } from './routes/keys';
-import { analyticsRouter } from './routes/analytics';
-import { systemRouter } from './routes/system';
-import { echoRouter } from './routes/echo';
-import { errorHandler, notFoundHandler } from './errors/errorHandler';
-import { disconnectDatabase } from './database/prisma';
-import { disconnectRedis } from './redis/client';
+import { config } from './config.js';
+import { healthRouter } from './routes/health.js';
+import { authRouter } from './routes/auth.js';
+import { gatewayRouter } from './routes/gateway.js';
+import { apisRouter } from './routes/apis.js';
+import { keysRouter } from './routes/keys.js';
+import { analyticsRouter } from './routes/analytics.js';
+import { systemRouter } from './routes/system.js';
+import { echoRouter } from './routes/echo.js';
+import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
+import { disconnectDatabase } from './database/prisma.js';
+import { disconnectRedis } from './redis/client.js';
 
 const app = express();
 

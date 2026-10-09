@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../database/prisma';
-import { config } from '../config';
-import { ConflictError, UnauthorizedError, NotFoundError } from '../errors/AppError';
-import { SafeUser, SessionPayload, RegisterInput, LoginInput } from './auth.types';
+import { prisma } from '../database/prisma.js';
+import { config } from '../config.js';
+import { ConflictError, UnauthorizedError, NotFoundError } from '../errors/AppError.js';
+import { SafeUser, SessionPayload, RegisterInput, LoginInput } from './auth.types.js';
 
 export class AuthService {
   /**

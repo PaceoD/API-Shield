@@ -1,9 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { authService } from '../auth/auth.service';
-import { requireAuthenticatedUser } from '../auth/auth.middleware';
-import { validateRequest } from '../validation/validate';
-import { RegisterRequestSchema, LoginRequestSchema } from '../auth/auth.validation';
-import { config } from '../config';
+import { authService } from '../auth/auth.service.js';
+import { requireAuthenticatedUser } from '../auth/auth.middleware.js';
+import { validateRequest } from '../validation/validate.js';
+import { RegisterRequestSchema, LoginRequestSchema } from '../auth/auth.validation.js';
+import { config } from '../config.js';
 
 export const authRouter = Router();
 

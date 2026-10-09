@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { config } from '../config';
+import { config } from '../config.js';
 
 export const echoRouter = Router();
 
