@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { config } from '../config.js';
+import { config } from '../config';
 
 // Declare global Prisma instance to prevent multiple client instances in development hot-reloads
 declare global {

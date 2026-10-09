@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { prisma } from '../database/prisma.js';
-import { SystemInfo, SystemSettings } from '../types.js';
+import { prisma } from '../database/prisma';
+import { SystemInfo, SystemSettings } from '../types';
 
 export const systemRouter = Router();
 

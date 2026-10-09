@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { authService } from './auth.service.js';
-import { UnauthorizedError, BadRequestError } from '../errors/AppError.js';
-import { config } from '../config.js';
+import { authService } from './auth.service';
+import { UnauthorizedError, BadRequestError } from '../errors/AppError';
+import { config } from '../config';
 
 /**
  * Middleware that requires a valid authenticated user session.

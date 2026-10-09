@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { checkDatabaseConnection } from '../database/prisma.js';
-import { checkRedisConnection } from '../redis/client.js';
-import { config } from '../config.js';
+import { checkDatabaseConnection } from '../database/prisma';
+import { checkRedisConnection } from '../redis/client';
+import { config } from '../config';
 
 export const healthRouter = Router();
 
